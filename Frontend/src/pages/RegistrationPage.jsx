@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -162,6 +162,12 @@ const RegistrationPage = () => {
             {isSubmitting ? "Registering..." : "Register"} {/* Show "Registering..." while submitting */}
           </button>
         </form>
+        <p className="text-center text-sm mt-4">
+          Have an account?{" "}
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Login here
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ const DashboardPage = () => {
     const [newTodo, setNewTodo] = useState({ title: "", description: "" });
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [disabledButtons, setDisabledButtons] = useState(false); // Track button disable state
     const navigate = useNavigate();
 
     const API_BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -33,11 +34,10 @@ const DashboardPage = () => {
                 if (err.response && err.response.data) {
                     setError(err.response.data.message);
                 } else {
-
                     setError("Failed to fetch todos. Please try again.");
                 }
-            };
-        }
+            }
+        };
 
         fetchTodos();
     }, []);
@@ -74,6 +74,8 @@ const DashboardPage = () => {
     };
 
     const handleToggleComplete = async (todoId) => {
+        if (loading || disabledButtons) return; // Prevent action if loading or buttons are disabled
+        setDisabledButtons(true); // Disable buttons while handling
         try {
             const response = await axios.put(
                 `${API_BASE_URL}/user/todos/${todoId}`,
@@ -90,10 +92,14 @@ const DashboardPage = () => {
             setTodos(updatedTodos);
         } catch (err) {
             setError("Failed to update todo. Please try again.");
+        } finally {
+            setDisabledButtons(false); // Re-enable buttons after completion
         }
     };
 
     const handleDeleteTodo = async (todoId) => {
+        if (loading || disabledButtons) return; // Prevent action if loading or buttons are disabled
+        setDisabledButtons(true); // Disable buttons while handling
         try {
             await axios.delete(`${API_BASE_URL}/user/todos/${todoId}`, {
                 headers: {
@@ -103,6 +109,8 @@ const DashboardPage = () => {
             setTodos(todos.filter((todo) => todo._id !== todoId));
         } catch (err) {
             setError("Failed to delete todo. Please try again.");
+        } finally {
+            setDisabledButtons(false); // Re-enable buttons after completion
         }
     };
 
@@ -170,8 +178,7 @@ const DashboardPage = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className={`py-2 px-4 bg-green-500 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${loading ? "opacity-50 cursor-not-allowed" : ""
-                                    }`}
+                                className={`py-2 px-4 bg-green-500 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                             >
                                 {loading ? "Adding..." : "Add Todo"}
                             </button>
@@ -189,10 +196,7 @@ const DashboardPage = () => {
                                 className="flex items-center justify-between p-4 border border-gray-200 rounded-md shadow-sm"
                             >
                                 <div className="flex-1">
-                                    <h3
-                                        className={`text-xl font-medium ${todo.completed ? "line-through text-gray-500" : "text-gray-800"
-                                            }`}
-                                    >
+                                    <h3 className={`text-xl font-medium ${todo.completed ? "line-through text-gray-500" : "text-gray-800"}`}>
                                         {todo.title}
                                     </h3>
                                     <p className="text-gray-600">{todo.description}</p>
@@ -200,14 +204,15 @@ const DashboardPage = () => {
                                 <div className="flex gap-4">
                                     <button
                                         onClick={() => handleToggleComplete(todo._id)}
-                                        className={`py-2 px-4 text-white font-semibold rounded-md ${todo.completed ? "bg-gray-500" : "bg-blue-500"
-                                            }`}
+                                        disabled={loading || disabledButtons} // Disable button during loading or if disabledButtons is true
+                                        className={`py-2 px-4 text-white font-semibold rounded-md ${todo.completed ? "bg-gray-500" : "bg-blue-500"} ${loading || disabledButtons ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
                                         {todo.completed ? "Completed" : "Mark as Complete"}
                                     </button>
                                     <button
                                         onClick={() => handleDeleteTodo(todo._id)}
-                                        className="py-2 px-4 bg-red-500 text-white font-semibold rounded-md"
+                                        disabled={loading || disabledButtons} // Disable button during loading or if disabledButtons is true
+                                        className={`py-2 px-4 bg-red-500 text-white font-semibold rounded-md ${loading || disabledButtons ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
                                         Delete
                                     </button>

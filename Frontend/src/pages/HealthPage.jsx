@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const HealthPage = () => {
   const [healthData, setHealthData] = useState(null);
@@ -55,6 +56,7 @@ const HealthPage = () => {
           <p className="text-lg font-medium text-gray-700">Message: {healthData.message}</p>
           <p className="text-lg font-medium text-gray-700">Timestamp: {new Date(healthData.timestamp).toLocaleString()}</p>
         </div>
+      <Link to="/dashboard" className="inline-block mt-6 p-2 bg-blue-500 rounded-full text-white ">Dashboard</Link>
       </div>
     </div>
   );
