@@ -20,6 +20,7 @@ const ProfilePage = () => {
         });
         setUserData(response.data);
       } catch (err) {
+        navigate("/login"); // Redirect to the login page if the token is invalid or expired
         setError("Failed to fetch profile data. Please try again.");
       }
     };
