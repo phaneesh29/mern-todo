@@ -115,8 +115,7 @@ const DashboardPage = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        navigate("/login");
+        navigate("/logout")
     };
 
     const handleProfileRedirect = () => {
@@ -170,7 +169,7 @@ const DashboardPage = () => {
                                 id="description"
                                 value={newTodo.description}
                                 onChange={(e) => setNewTodo({ ...newTodo, description: e.target.value })}
-                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full min-h-[50px] resize-y p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter description"
                             />
                         </div>
@@ -193,7 +192,7 @@ const DashboardPage = () => {
                         {todos.map((todo) => (
                             <li
                                 key={todo._id}
-                                className="flex items-center justify-between p-4 border border-gray-200 rounded-md shadow-sm"
+                                className="flex flex-wrap gap-3 items-center justify-between p-4 border border-gray-200 rounded-md shadow-sm"
                             >
                                 <div className="flex-1">
                                     <h3 className={`text-xl font-medium ${todo.completed ? "line-through text-gray-500" : "text-gray-800"}`}>

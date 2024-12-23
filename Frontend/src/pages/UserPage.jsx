@@ -77,6 +77,7 @@ const UserPage = () => {
 
         <div className="mb-6">
           <h2 className="text-2xl font-semibold text-gray-700">User Info</h2>
+          <p className="text-lg text-gray-800">UUID: {userData.user._id}</p>
           <p className="text-lg text-gray-800">Name: {userData.user.fullname.firstname} {userData.user.fullname.lastname}</p>
           <p className="text-lg text-gray-800">Email: {userData.user.email}</p>
         </div>

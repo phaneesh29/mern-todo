@@ -23,12 +23,12 @@ const NotFound = () => {
             />
 
             {/* Heading */}
-            <h1 className="text-5xl font-extrabold mb-4 text-gray-700 drop-shadow-lg">
+            <h1 className="text-5xl text-pretty text-center font-extrabold mb-4 text-gray-700 drop-shadow-lg">
                 404: Page Not Found
             </h1>
 
             {/* Random Quote */}
-            <p className="text-lg italic mb-6 text-gray-600">{randomQuote}</p>
+            <p className="text-lg text-pretty text-center italic mb-6 text-gray-600">{randomQuote}</p>
 
             {/* Back Home Button */}
             <Link

@@ -25,9 +25,14 @@ const App = () => {
         <Route path="/health" element={<HealthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Link to="/health"><div className='absolute flex justify-center items-center gap-1 bottom-2 left-3 bg-gradient-to-tl p-2 rounded-full from-slate-300 to-slate-400 '>
-        <MdHealthAndSafety />Health
-      </div></Link>
+      <Link to="/health" aria-label="Go to Health section">
+        <div className="fixed flex justify-center items-center gap-2 bottom-2 left-2 bg-gradient-to-br p-3 rounded-full from-green-400 via-purple-300 to-green-500 shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300 md:bottom-6 md:left-6">
+          <MdHealthAndSafety className="text-black text-lg" />
+          <span className="text-sm font-semibold text-black hidden sm:inline">Health</span>
+        </div>
+      </Link>
+
+
     </>
   )
 }
