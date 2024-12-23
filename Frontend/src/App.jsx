@@ -10,10 +10,11 @@ import DashboardPage from './pages/DashboardPage';
 import UserPage from './pages/UserPage';
 import HealthPage from './pages/HealthPage';
 import { MdHealthAndSafety } from "react-icons/md";
-
+import { Analytics } from '@vercel/analytics/react';
 const App = () => {
   return (
     <>
+    <Analytics />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<RegistrationPage />} />
