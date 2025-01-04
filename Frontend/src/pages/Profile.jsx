@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ProfilePage = () => {
@@ -85,6 +85,7 @@ const ProfilePage = () => {
           >
             Share Profile
           </button>
+          <Link to={"/forgot"} className="text-blue-800 underline block mt-5">Change password</Link>
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ const RegistrationPage = () => {
     e.preventDefault();
     setErrors([]);
     setSuccessMessage("");
-    setIsSubmitting(true); // Disable button during submission
+    setIsSubmitting(true); 
 
     try {
       const res = await axios.post(`${API_BASE_URL}/register`, {
@@ -39,9 +39,8 @@ const RegistrationPage = () => {
         password: formData.password,
       });
 
-      localStorage.setItem("token", res.data.token);
-      setSuccessMessage("Registration successful!");
-      setTimeout(() => navigate("/dashboard"), 1500);
+      setSuccessMessage("Registration successful, Verify your email!");
+      setTimeout(() => navigate("/login"), 1000);
     } catch (error) {
       console.log(error);
       if (error.response?.status === 400) {

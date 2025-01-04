@@ -10,11 +10,14 @@ import DashboardPage from './pages/DashboardPage';
 import UserPage from './pages/UserPage';
 import HealthPage from './pages/HealthPage';
 import { MdHealthAndSafety } from "react-icons/md";
+import VerifyEmail from './pages/VerifyEmail';
 import { Analytics } from '@vercel/analytics/react';
+import Forgot from './pages/Forgot';
+import ChangePassword from './pages/ChangePassword';
 const App = () => {
   return (
     <>
-    <Analytics />
+      <Analytics />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<RegistrationPage />} />
@@ -24,6 +27,9 @@ const App = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/users/:id" element={<UserPage />} />
         <Route path="/health" element={<HealthPage />} />
+        <Route path="/verifyemail" element={<VerifyEmail />} />
+        <Route path="/forgot" element={<Forgot />} />
+        <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Link to="/health" aria-label="Go to Health section">

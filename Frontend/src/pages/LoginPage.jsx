@@ -114,6 +114,7 @@ const LoginPage = () => {
                 {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
               </button>
             </div>
+            <span className="text-sm mt-2">Forgot password, <Link to="/forgot" className="text-indigo-500">Click here </Link></span>
           </div>
           <button
             type="submit"
