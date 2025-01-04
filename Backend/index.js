@@ -8,6 +8,8 @@ import UserModel from "./models/user.model.js";
 import { authUser } from "./middlewares/auth.middleware.js";
 import blacklistTokenModel from "./models/blacklistToken.model.js";
 import TodoModel from "./models/todo.model.js";
+import { sendEmail } from "./helpers/mailer.js";
+
 connectDB()
 
 const app = express()
@@ -31,11 +33,13 @@ app.post("/register", [
                 return res.status(400).json({ errors: errors.array() })
             }
             const { fullname, email, password } = req.body
+
             if (!fullname || !email || !password) {
                 return res.status(400).json({ message: "All fields are required" });
 
             }
             const isUserAlreadyExist = await UserModel.findOne({ email })
+
             if (isUserAlreadyExist) {
                 return res.status(400).json({ message: 'User already exist' });
             }
@@ -48,13 +52,46 @@ app.post("/register", [
                 email,
                 password: hashedPassword
             })
-            const token = user.genrateAuthToken()
-            res.status(201).json({ token, user })
+
+            await sendEmail({ email, emailType: "VERIFY", userId: user._id })
+
+            res.status(201).json({
+                message: "User created, check your email to verify account",
+                success: true,
+                user
+            })
         } catch (error) {
-            res.status(500).json({ message: "Server error" });
+            console.log(error)
+            res.status(500).json({ message: error.message });
         }
     }
 )
+
+app.post("/verifyemail", async (req, res) => {
+    try {
+        const { token } = req.body
+
+        if (!token) {
+            return res.status(400).json({ message: "Token is required" })
+        }
+
+        const user = await UserModel.findOne({ verifyToken: token, verifyTokenExpiry: { $gt: Date.now() } })
+
+        if (!user) {
+            return res.status(400).json({ error: "Invalid token" })
+        }
+
+        user.isVerified = true
+        user.verifyToken = undefined
+        user.verifyTokenExpiry = undefined
+        await user.save()
+
+        return res.status(200).json({ message: "Email verified successfully", success: true })
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
 
 app.post("/login", [
     body("email").isEmail().withMessage("Enter a valid email"),
@@ -83,24 +120,80 @@ app.post("/login", [
                 return res.status(401).json({ message: 'Invalid email or password' });
             }
 
+            if (!user.isVerified) {
+                await sendEmail({ email, emailType: "VERIFY", userId: user._id })
+                return res.status(401).json({ message: 'User not verified, Email sent again' });
+            }
 
             const token = user.genrateAuthToken()
 
             res.cookie("token", token)
 
-            res.status(200).json({ token, user })
+            res.status(200).json({ message: "Login Successfull", token, user })
         }
         catch (error) {
-            res.status(500).json({ message: "Server error" });
+            res.status(500).json({ message: error.message });
         }
     }
 )
+
+app.post("/forgot", async (req, res) => {
+    try {
+        const { email } = req.body
+
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" })
+        }
+
+        const user = await UserModel.findOne({ email })
+        if (!user) {
+            return res.status(404).json({ message: "User not found" })
+        }
+
+        await sendEmail({ email, emailType: "FORGOT", userId: user._id })
+
+        return res.status(200).json({ message: "Email sent successfully" })
+
+    } catch (error) {
+        return res.status(500).json({ message: "Server error" })
+    }
+})
+
+app.post("/changepassword", async (req, res) => {
+    try {
+        const { token, password, confirmPassword } = req.body
+
+        if (!token) {
+            return res.status(400).json({ message: "Token is required" })
+        }
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: "Password does not match" })
+        }
+
+        const user = await UserModel.findOne({ forgotPasswordToken: token, forgotPasswordTokenExpiry: { $gt: Date.now() } })
+
+        if (!user) {
+            return res.status(400).json({ error: "Invalid token" })
+        }
+
+        const hashedPassword = await UserModel.hashPassword(password)
+        user.password = hashedPassword
+        user.forgotPasswordToken = undefined
+        user.forgotPasswordTokenExpiry = undefined
+        await user.save()
+
+        return res.status(200).json({ message: "Password changed successfully" })
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
 
 app.get("/profile", authUser, async (req, res) => {
     try {
         res.status(200).json(req.user);
     } catch (error) {
-        res.status(500).json({ message: "Something went wrong" });
+        res.status(500).json({ message: error.message });
     }
 })
 

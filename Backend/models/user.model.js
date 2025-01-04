@@ -24,7 +24,15 @@ const userSchema = new Schema({
         type: String,
         required: true,
         select: false
-    }
+    },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    forgotPasswordToken: String,
+    forgotPasswordTokenExpiry: Date,
+    verifyToken: String,
+    verifyTokenExpiry: Date,
 })
 
 userSchema.methods.genrateAuthToken = function () {
