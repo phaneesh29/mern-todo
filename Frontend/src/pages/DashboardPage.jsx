@@ -20,7 +20,7 @@ const DashboardPage = () => {
         }
 
         isValidToken(token).then((res) => {
-            
+
             if (!res) {
                 localStorage.setItem("token", "");
                 navigate("/login")
@@ -86,8 +86,8 @@ const DashboardPage = () => {
     };
 
     const handleToggleComplete = async (todoId) => {
-        if (loading || disabledButtons) return; // Prevent action if loading or buttons are disabled
-        setDisabledButtons(true); // Disable buttons while handling
+        if (loading || disabledButtons) return;
+        setDisabledButtons(true);
         try {
             const response = await axios.put(
                 `${API_BASE_URL}/task/todos/${todoId}`,
@@ -101,6 +101,7 @@ const DashboardPage = () => {
             const updatedTodos = todos.map((todo) =>
                 todo._id === todoId ? response.data : todo
             );
+            updatedTodos.sort((a, b) => a.completed - b.completed)
             setTodos(updatedTodos);
         } catch (err) {
             setError("Failed to update todo. Please try again.");
@@ -125,6 +126,24 @@ const DashboardPage = () => {
             setDisabledButtons(false); // Re-enable buttons after completion
         }
     };
+
+    const deleteAllCompleted = async () => {
+        if (loading || disabledButtons) return;
+        setDisabledButtons(true);
+        try {
+            await axios.delete(`${API_BASE_URL}/task/delete/completed`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            setTodos(todos.filter((todo) => todo.completed !== true));
+
+        } catch (error) {
+            setError("Failed to delete todos. Please try again.");
+        } finally {
+            setDisabledButtons(false); // Re-enable buttons after completion
+        }
+    }
 
     const handleLogout = () => {
         navigate("/logout")
@@ -199,7 +218,10 @@ const DashboardPage = () => {
 
                 {/* Display all Todos */}
                 <div>
-                    <h2 className="text-2xl font-semibold text-gray-700 mb-3">Your Todos</h2>
+                    <div className="flex justify-between items-center mb-5">
+                        <h2 className="text-2xl font-semibold text-gray-700 mb-3">Your Todos</h2>
+                        <button onClick={deleteAllCompleted} className={`py-2 px-4 mb-3 bg-red-700 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}>Delete All Completed</button>
+                    </div>
                     <ul className="space-y-4">
                         {todos.map((todo) => (
                             <li

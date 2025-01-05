@@ -77,3 +77,20 @@ export const deleteAuthUserTodo = async (req, res) => {
 
     }
 }
+
+export const deleteAllCompletedTodosController = async (req, res) => {
+    try {
+        const user = req.user
+        if (!user) {
+            return res.status(400).json({ message: "User not found" })
+        }
+
+        const allTodos = await TodoModel.deleteMany({ user: user._id, completed: true })
+
+        res.status(200).json({ message: "Todos deleted successfully", deletedCount: allTodos.deletedCount });
+
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+
+    }
+}
