@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { isValidToken } from "../utils/checkToken";
 
 const DashboardPage = () => {
     const [todos, setTodos] = useState([]);
@@ -17,8 +18,20 @@ const DashboardPage = () => {
         if (!token) {
             navigate("/login");
         }
-        // edge case to do..
-    }, [navigate]);
+
+        isValidToken(token).then((res) => {
+            
+            if (!res) {
+                localStorage.setItem("token", "");
+                navigate("/login")
+            }
+        }).catch((err) => {
+            navigate("/login")
+        })
+
+
+
+    }, []);
 
     useEffect(() => {
         const fetchTodos = async () => {
