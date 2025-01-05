@@ -12,7 +12,7 @@ const LogoutPage = () => {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/logout`, {
+      const response = await axios.get(`${API_BASE_URL}/users/logout`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

@@ -30,7 +30,7 @@ const RegistrationPage = () => {
     setIsSubmitting(true); 
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/register`, {
+      const res = await axios.post(`${API_BASE_URL}/users/register`, {
         fullname: {
           firstname: formData.firstname,
           lastname: formData.lastname,

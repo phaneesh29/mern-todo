@@ -12,19 +12,18 @@ const DashboardPage = () => {
 
     const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
-    // Check if user is logged in by verifying token in localStorage
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
-            navigate("/login"); // Redirect to login if no token
+            navigate("/login");
         }
+        // edge case to do..
     }, [navigate]);
 
-    // Fetch the user's todos when the component mounts
     useEffect(() => {
         const fetchTodos = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/user/todos`, {
+                const response = await axios.get(`${API_BASE_URL}/task/todos`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
@@ -52,7 +51,7 @@ const DashboardPage = () => {
         setLoading(true);
         try {
             const response = await axios.post(
-                `${API_BASE_URL}/user/todos`,
+                `${API_BASE_URL}/task/todos`,
                 {
                     title: newTodo.title,
                     description: newTodo.description,
@@ -78,7 +77,7 @@ const DashboardPage = () => {
         setDisabledButtons(true); // Disable buttons while handling
         try {
             const response = await axios.put(
-                `${API_BASE_URL}/user/todos/${todoId}`,
+                `${API_BASE_URL}/task/todos/${todoId}`,
                 {},
                 {
                     headers: {
@@ -101,7 +100,7 @@ const DashboardPage = () => {
         if (loading || disabledButtons) return; // Prevent action if loading or buttons are disabled
         setDisabledButtons(true); // Disable buttons while handling
         try {
-            await axios.delete(`${API_BASE_URL}/user/todos/${todoId}`, {
+            await axios.delete(`${API_BASE_URL}/task/todos/${todoId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },

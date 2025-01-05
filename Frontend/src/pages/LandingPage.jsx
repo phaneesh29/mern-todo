@@ -35,7 +35,7 @@ const LandingPage = () => {
         </p>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
           <Link
-            to="/register"
+            to="/dashboard"
             className="px-6 sm:px-8 py-3 bg-blue-500 text-white font-bold rounded-lg shadow-lg hover:bg-blue-600 transition-all duration-300"
           >
             Get Started
@@ -50,7 +50,7 @@ const LandingPage = () => {
       </main>
 
       {/* Features Section */}
-      <section className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 max-w-6xl px-4">
+      <section className=" flex justify-center items-center flex-wrap gap-10 mt-16 max-w-6xl px-4">
         <div className="flex flex-col items-center text-center space-y-4">
           <img
             src="https://cdn-icons-png.flaticon.com/512/1000/1000964.png"

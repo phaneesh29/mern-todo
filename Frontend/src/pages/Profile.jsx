@@ -13,14 +13,14 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/profile`, {
+        const response = await axios.get(`${API_BASE_URL}/users/profile`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Send the token in the request header
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         setUserData(response.data);
       } catch (err) {
-        navigate("/login"); // Redirect to the login page if the token is invalid or expired
+        navigate("/login");
         setError("Failed to fetch profile data. Please try again.");
       }
     };

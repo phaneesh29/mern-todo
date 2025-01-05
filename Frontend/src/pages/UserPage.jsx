@@ -15,7 +15,7 @@ const UserPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/users/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/id/users/${id}`);
         setUserData(response.data);
       } catch (err) {
         setError("Failed to fetch user data. Please try again.");

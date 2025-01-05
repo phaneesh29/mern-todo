@@ -13,10 +13,12 @@ const Forgot = () => {
         try {
             setButtonDisabled(true)
             setLoading(true)
-            const response = await axios.post(`${API_BASE_URL}/forgot`, { email })
+            const response = await axios.post(`${API_BASE_URL}/users/forgot`, { email })
+            setError("")
             setSuccess(response?.data?.message)
         } catch (error) {
-            setError(error?.response?.data?.error || error.message || "Something went wrong")
+            console.log(error)
+            setError(error?.response?.data?.error || error?.response?.data?.errors[0]?.msg || error.message || "Something went wrong")
         } finally {
             setButtonDisabled(false)
             setLoading(false)
@@ -37,6 +39,7 @@ const Forgot = () => {
         <div className="flex justify-center items-center h-screen w-screen flex-col gap-6 bg-blue-100">
             <div className="bg-white p-8 rounded-lg shadow-lg flex justify-center items-center flex-col gap-4">
                 {success && <div className="bg-green-100 p-4 rounded-lg">{success}</div>}
+                {error && <div className="bg-red-100 text-red-500 p-4 rounded-lg">{error}</div>}
                 <h1 className="text-2xl font-semibold mb-4">{loading ? "Processing" : "Forgot Password"}</h1>
                 <div className="flex flex-col justify-center items-start gap-1 text-lg">
                     <label className="w-[100px]" htmlFor="email">Email</label>
@@ -48,7 +51,6 @@ const Forgot = () => {
                     <button onClick={onForgot} disabled={buttonDisabled} className={`p-3 bg-blue-800 rounded-lg text-white hover:bg-blue-500 transition-all duration-300 ${buttonDisabled ? "cursor-not-allowed" : "cursor-pointer"}`}>{buttonDisabled ? "Confirm" : "Confirm"} </button>
                 </div>
             </div>
-            {error && <div className="bg-red-100 text-red-500 p-4 rounded-lg">{error}</div>}
         </div>
     )
 }

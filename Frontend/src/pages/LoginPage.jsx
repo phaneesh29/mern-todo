@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Importing React Icons for show/hide button
@@ -25,7 +25,7 @@ const LoginPage = () => {
     setIsSubmitting(true); // Disable button during submission
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/login`, {
+      const res = await axios.post(`${API_BASE_URL}/users/login`, {
         email: formData.email,
         password: formData.password,
       });
@@ -45,6 +45,14 @@ const LoginPage = () => {
       setIsSubmitting(false); // Re-enable button after submission is complete
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (token) {
+      navigate("/dashboard")
+    }
+  }, [])
+
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);

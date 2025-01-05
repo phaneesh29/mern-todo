@@ -13,7 +13,7 @@ const VerifyEmail = () => {
     const verifyUserEmail = async () => {
         setLoading(true);
         try {
-            const response = await axios.post(`${API_BASE_URL}/verifyemail`, { token })
+            const response = await axios.post(`${API_BASE_URL}/users/verifyemail`, { token })
             setVerified(true);
         } catch (error) {
             setError(error?.response?.data?.error || "Error verifying email");
