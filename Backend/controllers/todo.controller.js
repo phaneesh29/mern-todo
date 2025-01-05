@@ -8,7 +8,7 @@ export const getAuthUserTodo = async (req, res) => {
     }
     const user_id = user_todo._id
     try {
-        const todos = await TodoModel.find({ user: user_id }).sort((a, b) => a.completed - b.completed)
+        const todos = await TodoModel.find({ user: user_id }).sort({ completed: 1 })
         if (!todos || todos.length === 0) {
             return res.status(404).json({ message: "No todos found" });
         }
